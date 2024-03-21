@@ -4,11 +4,13 @@ using System.Diagnostics;
 
 namespace Mission11_McAvoy.Controllers
 {
+
     public class HomeController : Controller
     {
-
-        public HomeController()
+        private IBookRepository _repo;
+        public HomeController(IBookRepository tmp)
         {
+            _repo = tmp;
         }
 
         public IActionResult Index()
