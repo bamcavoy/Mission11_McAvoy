@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Mission11_McAvoy.Models;
+using Mission11_McAvoy.Models.ViewModels;
 using System.Diagnostics;
 
 namespace Mission11_McAvoy.Controllers
@@ -13,9 +14,26 @@ namespace Mission11_McAvoy.Controllers
             _repo = tmp;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int pageNum)
         {
-            return View();
+            int pageSize = 5;
+
+            var model = new BooksListViewModel
+            {
+                Books = _repo.Books
+                    .OrderBy(x => x.Title)
+                    .Skip((pageNum - 1) * pageSize)
+                    .Take(pageSize),
+
+                PaginationInfo = new PaginationInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = _repo.Books.Count()
+                }
+            };
+
+            return View(model);
         }
 
     }
